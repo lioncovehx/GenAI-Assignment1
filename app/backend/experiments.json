@@ -1,0 +1,18 @@
+[
+  {"task": "Universal autoencoder", "facts": [
+    ["Test PSNR, salt-and-pepper", "27.6 dB"], ["Test PSNR, Gaussian blur", "26.9 dB"],
+    ["Test PSNR, occlusion", "22.2 dB"], ["Test PSNR, clean images", "27.9 dB"],
+    ["ONNX size", "17.9 MB"], ["ONNX parity, max difference", "4.0e-6"], ["CPU time per image", "3.4 ms"]]},
+  {"task": "Classifier and hard-routed specialists", "facts": [
+    ["Classifier test accuracy", "0.9963"], ["Classifier macro-F1", "0.9940"],
+    ["Test PSNR, salt / blur / occlusion", "28.5 / 27.5 / 22.7 dB"], ["Clean images left untouched", "99.2%"],
+    ["ONNX files", "classifier 2.2 MB + 3 experts 17.9 MB"], ["ONNX parity, end to end", "4.4e-6"]]},
+  {"task": "Soft mixture of experts", "facts": [
+    ["Test PSNR, salt / blur / occlusion", "28.7 / 29.2 / 21.6 dB"], ["Test PSNR, mild blur", "32.6 dB"],
+    ["Identity weight on mild / strong blur", "0.82 / 0.41"], ["Gate accuracy (argmax)", "0.83"],
+    ["ONNX size", "55.8 MB"], ["CPU time per image, all branches", "10.6 ms"]]},
+  {"task": "Face-to-sketch cGAN", "facts": [
+    ["Test LPIPS (lower is better)", "0.207"], ["Test SSIM", "0.525"],
+    ["Style sensitivity", "0.101"], ["ONNX size", "94.3 MB"],
+    ["ONNX parity, max difference", "3.7e-6"], ["CPU time per image", "3.3 ms"]]}
+]
