@@ -11,7 +11,7 @@ services:
   frontend:
     build: ./app/frontend
     ports:
-      - "8080:80"
+      - "127.0.0.1:8080:80"
     depends_on:
       backend:
         condition: service_healthy
@@ -27,4 +27,4 @@ services:
     volumes:
       - ./mlflow.db:/mlflow/mlflow.db:ro
     ports:
-      - "5001:5000"
+      - "127.0.0.1:5001:5000"
