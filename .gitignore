@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+data/
+mlruns/
+**/outputs/
+node_modules/
+dist/
+# downloaded from the GitHub release by get_models.sh
+models/*.onnx
