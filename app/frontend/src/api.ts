@@ -25,11 +25,13 @@ export interface HardResult extends Restored {
   probs: Record<"clean" | "salt" | "blur" | "occlusion", number>;
   predicted: "clean" | "salt" | "blur" | "occlusion";
   expert: Expert;
+  filled_share: number; // share of pixels taken from the model (occlusion boxes); 0 = whole output used
   inference_ms: { classifier: number; expert: number; total: number };
 }
 export interface SoftResult extends Restored {
   weights: Record<Expert, number>;
   dominant: Expert;
+  filled_share: number;
   branch_pngs: Record<Expert, string>;
   inference_ms: number;
 }

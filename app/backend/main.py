@@ -136,8 +136,12 @@ async def restore_hard(image: UploadFile | None = File(None), sample_id: str | N
         expert = CLASSES[k]
         (out,), ms_e = run(f"expert_{expert}", {"input": x[None]})
         y = out[0]
+    filled = 0.0
+    if expert == "occlusion":
+        y, filled = P.keep_known(x, y)
     return {"input_png": P.png_data_url(x), "output_png": P.png_data_url(y), "corruption": info,
             "probs": {c: round(float(v), 4) for c, v in zip(CLASSES, p)}, "predicted": CLASSES[k], "expert": expert,
+            "filled_share": round(filled, 4),
             "inference_ms": {"classifier": round(ms_c, 2), "expert": round(ms_e, 2), "total": round(ms_c + ms_e, 2)}}
 
 
@@ -147,8 +151,10 @@ async def restore_soft(image: UploadFile | None = File(None), sample_id: str | N
     x, info = await prepare(image, sample_id, corruption, severity)
     (y, w, branches), ms = run("soft_moe", {"input": x[None]})
     weights = {b: round(float(v), 4) for b, v in zip(BRANCHES, w[0])}
-    return {"input_png": P.png_data_url(x), "output_png": P.png_data_url(y[0]), "corruption": info,
-            "weights": weights, "dominant": max(weights, key=weights.get),
+    dominant = max(weights, key=weights.get)
+    out, filled = P.keep_known(x, y[0]) if dominant == "occlusion" else (y[0], 0.0)
+    return {"input_png": P.png_data_url(x), "output_png": P.png_data_url(out), "corruption": info,
+            "weights": weights, "dominant": dominant, "filled_share": round(filled, 4),
             "branch_pngs": {b: P.png_data_url(branches[0, i]) for i, b in enumerate(BRANCHES)},
             "inference_ms": round(ms, 2)}
 

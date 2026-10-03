@@ -103,6 +103,7 @@ async function restore(kind: string, f: FormData) {
       ...shared,
       output_png: predicted === "clean" ? input.toDataURL() : shared.output_png,
       probs: Object.fromEntries(CLASSES.map((k, i) => [k, p[i]])),
+      filled_share: 0,
       predicted,
       expert: predicted === "clean" ? "identity" : predicted,
       inference_ms: { classifier: 0.4, expert: 3.1, total: 3.5 },
@@ -113,6 +114,7 @@ async function restore(kind: string, f: FormData) {
   return {
     ...shared,
     weights: Object.fromEntries(KEYS.map((k, i) => [k, w[i]])),
+    filled_share: 0,
     dominant: KEYS[w.indexOf(Math.max(...w))],
     branch_pngs: Object.fromEntries(KEYS.map((k, i) => [k, canvas(input, branchFilters[i]).toDataURL()])),
     inference_ms: 14.2,

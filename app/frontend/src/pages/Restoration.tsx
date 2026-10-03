@@ -290,6 +290,7 @@ function HardStage(p: StageProps<HardResult>) {
             ["Corruption", r.corruption.label],
             ["Predicted", ROUTES.find((x) => x.cls === r.predicted)!.label],
             ["Expert", bypass ? "Identity bypass, image returned unchanged" : ROUTES.find((x) => x.cls === r.expert)!.expert],
+            ...filledReadout(r.filled_share),
             [
               "Inference",
               `${fmt(r.inference_ms.classifier, 1)} classifier + ${fmt(r.inference_ms.expert, 1)} expert = ${ms(r.inference_ms.total)}`,
@@ -313,6 +314,10 @@ export function HardRouted() {
     />
   );
 }
+
+// Occlusion results keep the input outside the detected boxes.
+const filledReadout = (share: number): [string, string][] =>
+  share > 0 ? [["Boxes filled", `${Math.round(share * 100)}% of the image; original pixels kept elsewhere`]] : [];
 
 // ---------------------------------------------------------------- Soft mixture of experts
 
@@ -387,6 +392,7 @@ function SoftStage(p: StageProps<SoftResult>) {
           items={[
             ["Corruption", r.corruption.label],
             ["Largest branch", BRANCHES.find((b) => b.key === r.dominant)!.label],
+            ...filledReadout(r.filled_share),
             ["Inference, all four branches", ms(r.inference_ms)],
           ]}
         />

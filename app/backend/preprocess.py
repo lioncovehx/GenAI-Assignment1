@@ -104,6 +104,32 @@ def corrupt(x: np.ndarray, kind: str, severity: str, rng: np.random.Generator) -
     return out, f"Occlusion, {severity}, {boxes}, {covered:.0%} covered"
 
 
+def find_boxes(x: np.ndarray, win: int = 6, tol: float = 6 / 255) -> np.ndarray:
+    """Mask [H,W] of near-black regions at least win x win in size (occlusion boxes).
+    Morphological opening: isolated dark pixels (pepper noise) and thin dark lines drop out."""
+    dark = x.max(0) <= tol
+    h, w = dark.shape
+    full = np.ones((h - win + 1, w - win + 1), bool)
+    for i in range(win):
+        for j in range(win):
+            full &= dark[i:i + h - win + 1, j:j + w - win + 1]
+    mask = np.zeros_like(dark)
+    for i in range(win):
+        for j in range(win):
+            mask[i:i + h - win + 1, j:j + w - win + 1] |= full
+    return mask
+
+
+def keep_known(x: np.ndarray, y: np.ndarray, min_share: float = 0.01) -> tuple[np.ndarray, float]:
+    """Take the model output only inside the detected boxes and the input everywhere else.
+    Returns (image, share of pixels replaced); unchanged output if no box is found."""
+    m = find_boxes(x)
+    share = float(m.mean())
+    if share < min_share:
+        return y, 0.0
+    return np.where(m[None], y, x), share
+
+
 def png_data_url(x: np.ndarray, value_range=(0.0, 1.0)) -> str:
     """float [C,H,W] (C = 1 or 3) -> PNG data URL."""
     import base64
