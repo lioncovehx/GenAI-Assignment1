@@ -15,7 +15,7 @@ You need Docker with Compose. From the repo root:
 ./get_models.sh && docker compose up --build
 ```
 
-`get_models.sh` downloads the seven trained ONNX models (214 MB) from the [`models-v1` release](https://github.com/Er0sama/GenAI-Assignment1/releases/tag/models-v1) into `models/` and checks their SHA-256 sums. On Windows, run it in Git Bash or WSL, or download the `.onnx` files from the release page into `models/` by hand.
+`get_models.sh` downloads the seven trained ONNX models (214 MB) from the [`models-v1` release](https://github.com/lioncovehx/GenAI-Assignment1/releases/tag/models-v1) into `models/` and checks their SHA-256 sums. On Windows, run it in Git Bash or WSL, or download the `.onnx` files from the release page into `models/` by hand.
 
 - App: http://localhost:8080
 - MLflow (training records, read-only): http://localhost:5001
