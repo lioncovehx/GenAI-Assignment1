@@ -2,7 +2,7 @@
 # Downloads the seven trained ONNX models from the GitHub release into models/ and checks them against SHA256SUMS.
 # Files that are already present and correct are skipped.
 set -e
-URL=https://github.com/lioncovehx/GenAI-Assignment1/releases/download/models-v1
+URL=https://github.com/lioncovehx/loupe/releases/download/models-v1
 cd "$(dirname "$0")/models"
 for f in $(awk '{print $2}' SHA256SUMS); do
   if [ -f "$f" ] && grep " $f\$" SHA256SUMS | sha256sum -c --status - 2>/dev/null; then continue; fi
